@@ -1,4 +1,4 @@
-from flask import Flask, request, Response, jsonify, json
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 import surprise
@@ -13,10 +13,8 @@ def hello_world():
 
 @app.route('/categories')
 def categories():
-    value = {
-        "categories": ['mountain','castle','swim','place','shopping_mall','amusement_park','art_gallery','museum']
-    }
-    return Response(json.dumps(value), mimetype='application/json')
+    categories = ['mountain','castle','swim','place','shopping_mall','amusement_park','art_gallery','museum']
+    return jsonify(categories)
 
 
 

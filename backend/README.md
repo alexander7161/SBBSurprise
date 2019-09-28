@@ -16,6 +16,10 @@ Mac/Linux:
 ```bash
 export FLASK_APP=app.py
 flask run
+
+or
+
+python3 -m flask run
 ```
 
 Windows:
