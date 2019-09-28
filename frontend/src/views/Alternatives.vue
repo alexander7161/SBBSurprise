@@ -3,7 +3,11 @@
         <md-card id="main-card">
             <md-card-header>
                 <div class="md-title">Alternatives</div>
-                <div class="md-subhead">Click on an option to choose it.</div>
+                <div class="md-subhead">Click on an alternative Surprise Trip to choose it. <br/>If you need some
+                    additional adjustments
+                    click here:
+                    <md-button id="options" class="md-primary" @click="showOptions">Options</md-button>
+                </div>
             </md-card-header>
             <md-card-content>
                 <ul id="surprises">
@@ -47,6 +51,10 @@
                 this.$store.commit('updatePrice', {
                     price: surprise.price
                 });
+            }, showOptions() {
+                //Todo enable Options like specific Time ranges (startTime and endTime),
+                // a different end location (so no roundtripp), a maximum time one wants to stay in the trains,
+                // exclude mobility options (not by boat - seasick, or by bus - wheelchair)
             }
         },
         computed: {
@@ -83,5 +91,9 @@
     .surpriseCards {
         width: 50%;
         margin: auto;
+    }
+
+    #options {
+        vertical-align: middle;
     }
 </style>
