@@ -1,6 +1,6 @@
 from flask import request
 
-# Module: surorise.py
+# Module: surprise.py
 expectedFields = ['time', 'location', 'categories']
 
 
