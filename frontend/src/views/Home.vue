@@ -20,7 +20,7 @@
                         </template>
                     </md-autocomplete>
 
-                    <md-datepicker v-model="selectedDate"/>
+                    <md-datepicker v-model="selectedDate" :md-disabled-dates="filterDate" />
 
                     <md-button class="md-primary" @click="handleRequest">Lezze Go</md-button>
                 </form>
