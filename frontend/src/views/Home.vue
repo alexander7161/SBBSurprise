@@ -81,8 +81,7 @@ export default {
                 startDate: this.selectedDate.toISOString().slice(0, 9)
             });
 
-            // TODO: fill in next wizard step
-            // this.$router.push('<nextStep>');
+            this.$router.push('categories');
         }
     },
     computed: {
