@@ -1,10 +1,12 @@
 from flask import request
 import pandas as pd
+import sbb
 # Module: surprise.py
 
 # Module: surprise.py
 
 expectedFields = ['time', 'locationId', 'categories']
+
 
 def main():
     assert request.method == 'POST'
@@ -15,37 +17,36 @@ def main():
         print('Missing field: %s' % missing)
         return 'Missing field: %s' % missing
 
-    print(data)
+    originLocation = data['locationId']
 
     # get all proper stations filtered by categories
-    categories = data.categories
+    categories = data['categories']
     df = getCSV()
     columns = list(df.columns)
 
     # check if a category is not in the column
-    invalid = checkCategoriesInColumns(categories,columns)
+    invalid = categoriesNotValid(categories, columns)
     if invalid:
         print('Invalid category %s' % invalid)
         return 'Invalid category %s' % invalid
-    
 
     for category in categories:
-        filtered_categories = df[category]>0
+        filtered_categories = df[category] > 0
         df = df[filtered_categories]
 
-    # rank stations by amount of the categories they've got
-    df = df.sort_values(by=categories,ascending=False)
+    # rank stations by amount of the categories
+    df = df.sort_values(by=categories, ascending=False)
 
-    # filter it more by possible attributes: weather, previous commutes or events
+    # TODO: filter it more by possible attributes: weather, previous commutes or events
+    stationLocations = list(
+        filter(lambda UIC: UIC is not originLocation, df['UIC'].tolist()))
 
-    # get the station details from the locationId (SBB)
+    trips = list(map(lambda stationId: sbb.getReturnTrip(
+        originLocation, stationId, date="2019-11-27"), stationLocations))
 
-    # take a limited amount (ranked by what?) of 15 and request travel details from starting station (locationId) until surprise station (get travel price and time)
+    print(trips)
 
-    # sort by prive and time
-
-    # return Array of the places
-    return "surprise"
+    return trips[0]
 
 
 def checkJson(expectedFields, data):
@@ -60,9 +61,10 @@ def checkJson(expectedFields, data):
 
 
 def getCSV():
-    return pd.read_csv("fakeData.csv") #csv file which you want to import
+    return pd.read_csv("fakeData.csv")  # csv file which you want to import
 
-def checkCategoriesInColumns(categories, columns):
+
+def categoriesNotValid(categories, columns):
     for category in categories:
         if category not in columns:
             return category
