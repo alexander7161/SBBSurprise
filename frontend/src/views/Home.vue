@@ -94,6 +94,7 @@ export default {
 <style lang="scss" scoped>
     #main-card {
         width: 48rem;
+        max-width: 90%;
         padding-left: 5vw;
         padding-right: 5vw;
         margin-left: auto;
