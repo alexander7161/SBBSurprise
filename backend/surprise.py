@@ -1,11 +1,11 @@
-from flask import request
+from flask import request, jsonify
 import pandas as pd
 import sbb
 # Module: surprise.py
 
 # Module: surprise.py
 
-expectedFields = ['time', 'locationId', 'categories']
+expectedFields = ['date', 'locationId', 'categories']
 
 
 def main():
@@ -42,11 +42,9 @@ def main():
         filter(lambda UIC: UIC is not originLocation, df['UIC'].tolist()))
 
     trips = list(map(lambda stationId: sbb.getReturnTrip(
-        originLocation, stationId, date="2019-11-27"), stationLocations))
-
+        originLocation, stationId, date=data['date']), stationLocations))
     print(trips)
-
-    return trips[0]
+    return jsonify(trips)
 
 
 def checkJson(expectedFields, data):

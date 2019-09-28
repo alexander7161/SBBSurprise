@@ -40,12 +40,19 @@ def getTripPrice(tripId, token):
         print(e)
 
 
+def getStartEndTimeFromSegments(segments):
+    firstSegment = segments[0]
+    lastSegment = segments[-1]
+    return {"startTime": firstSegment['origin']['departureDateTime'], "endTime": lastSegment['destination']['arrivalDateTime']}
+
+
 def getTrip(originId, destinationId, date, time):
     token = getSBBToken()['access_token']
     trip = getTripId(originId, destinationId, date, time, token)
     tripId = trip['tripId']
     tripPrice = getTripPrice(tripId, token)['price']
-    return {"price": tripPrice, "segments": trip['segments']}
+    startEndTimes = getStartEndTimeFromSegments(trip['segments'])
+    return {"price": tripPrice, **startEndTimes}
 
 
 def getReturnTrip(originId, destinationId, date):
