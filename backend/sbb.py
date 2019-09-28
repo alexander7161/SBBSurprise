@@ -43,7 +43,8 @@ def getTripPrice(tripId, token):
 def getStartEndTimeFromSegments(segments):
     firstSegment = segments[0]
     lastSegment = segments[-1]
-    return {"startTime": firstSegment['origin']['departureDateTime'], "endTime": lastSegment['destination']['arrivalDateTime']}
+    return {"startTime": firstSegment['origin']['departureDateTime'],
+            "endTime": lastSegment['destination']['arrivalDateTime']}
 
 
 def getTrip(originId, destinationId, date, time):
@@ -52,13 +53,25 @@ def getTrip(originId, destinationId, date, time):
     tripId = trip['tripId']
     tripPrice = getTripPrice(tripId, token)['price']
     startEndTimes = getStartEndTimeFromSegments(trip['segments'])
-    return {"price": tripPrice, **startEndTimes}
+    return tripPrice, startEndTimes, trip
+
+
+def getFirstLeg(originId, destinationId, date, time):
+    price, startEndTimes, trip = getTrip(originId, destinationId, date, time)
+    return {"price": price, **startEndTimes}, trip['segments'][0]['origin']['name']
+
+
+def getSecondLeg(originId, destinationId, date, time):
+    price, startEndTimes, trip = getTrip(originId, destinationId, date, time)
+    return {"price": price, **startEndTimes}
 
 
 def getReturnTrip(originId, destinationId, date):
-    firstLeg = getTrip(originId, destinationId, date, "10:00")
-    secondLeg = getTrip(destinationId, originId, date, "17:00")
+    firstLeg, startLocation = getFirstLeg(
+        originId, destinationId, date, "10:00")
+    secondLeg = getSecondLeg(destinationId, originId, date, "17:00")
     if firstLeg is None or secondLeg is None:
         return None
     price = firstLeg['price'] + secondLeg['price']
-    return {"price": price, "firstLeg": firstLeg, "secondLeg": secondLeg}
+    return {"price": price, "firstLeg": firstLeg, "secondLeg": secondLeg,
+            "startLocation": startLocation, "originId": originId}
