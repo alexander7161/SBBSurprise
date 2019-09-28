@@ -1,0 +1,8 @@
+---
+applications:
+- name: Backend
+  routes: 
+    - route: backendhackers.scapp.io
+  env:
+    FLASK_APP: app.py
+  command: null
