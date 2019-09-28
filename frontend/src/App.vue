@@ -1,11 +1,12 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <md-app id="app">
+    <md-app-toolbar class="md-primary">
+      <span class="md-title">SBB Surprise</span>
+    </md-app-toolbar>
+    <md-app-content>
+      <router-view/>
+    </md-app-content>
+  </md-app>
 </template>
 
 <style lang="scss">
@@ -24,6 +25,5 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
