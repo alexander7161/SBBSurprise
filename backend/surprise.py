@@ -1,8 +1,10 @@
 from flask import request
 import pandas as pd
+# Module: surprise.py
 
 # Module: surprise.py
 
+expectedFields = ['time', 'locationId', 'categories']
 
 def main():
     assert request.method == 'POST'
@@ -56,6 +58,7 @@ def checkJson(expectedFields, data):
         except:
             return f
 
+
 def getCSV():
     return pd.read_csv("fakeData.csv") #csv file which you want to import
 
@@ -63,6 +66,3 @@ def checkCategoriesInColumns(categories, columns):
     for category in categories:
         if category not in columns:
             return category
-
-
-expectedFields = ['time', 'locationId', 'categories']
