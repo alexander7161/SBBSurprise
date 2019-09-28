@@ -78,11 +78,10 @@ export default {
             });
 
             this.$store.commit('updateDate', {
-                startDate: this.selectedDate.toISOString().slice(0, 9)
+                startDate: this.selectedDate.toISOString().slice(0, 10)
             });
 
-            // TODO: fill in next wizard step
-            // this.$router.push('<nextStep>');
+            this.$router.push('categories');
         }
     },
     computed: {
@@ -94,6 +93,7 @@ export default {
 <style lang="scss" scoped>
     #main-card {
         width: 48rem;
+        max-width: 90%;
         padding-left: 5vw;
         padding-right: 5vw;
         margin-left: auto;
