@@ -1,4 +1,5 @@
 from flask import request
+import pandas as pd
 
 # Module: surorise.py
 
@@ -26,5 +27,10 @@ def checkJson(expectedFields, data):
         except:
             return f
 
+def getCSV():
+    df = pd.read_csv("fakeData.csv") #csv file which you want to import
+    return df.to_string()
 
-expectedFields = ['time', 'location', 'categories']
+
+
+expectedFields = ['time', 'locationId', 'categories']
