@@ -10,7 +10,8 @@ def hello_world():
 
 @app.route('/categories')
 def categories():
-    return ['mountain']
+    return ['mountain','castle','swim','place','shopping_mall','amusement_park','art_gallery','museum']
+
 
 
 @app.route('/surprise', methods=['POST'])
