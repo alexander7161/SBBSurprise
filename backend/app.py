@@ -1,7 +1,9 @@
 from flask import Flask, request, Response, jsonify, json
+from flask_cors import CORS
 import os
 import surprise
 app = Flask(__name__)
+CORS(app)
 port = int(os.getenv("PORT", 8080))
 
 @app.route('/')
