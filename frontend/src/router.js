@@ -28,6 +28,11 @@ export default new Router({
             path: '/success',
             name: 'success',
             component: () => import('./views/Success.vue')
+        },
+        {
+            path: '/alternatives',
+            name: 'alternatives',
+            component: () => import('./views/Alternatives.vue')
         }
     ]
 })
