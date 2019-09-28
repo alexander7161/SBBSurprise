@@ -38,6 +38,7 @@ def getTripPrice(tripId, token):
         return res.json()[0]
     except Exception as e:
         print(e)
+        print(res.text)
 
 
 def getStartEndTimeFromSegments(segments):
