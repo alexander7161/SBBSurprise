@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 def getSBBToken():
@@ -12,15 +13,45 @@ def getSBBToken():
         print(e)
 
 
-def getTrip(originId, destinationId, date, time):
-    token = getSBBToken()['access_token']
-    url = 'https://b2p.app.sbb.ch/api/trips'
-    headers = {"Authorization": f'{token}', "X-Contract-Id": "HAC222P",
+def getTripId(originId, destinationId, date, time, token):
+    url = 'https://b2p-int.api.sbb.ch/api/trips'
+    headers = {"Authorization": token, "X-Contract-Id": "HAC222P",
                "X-Conversation-Id": "cafebabe-0815-4711-1234-ffffdeadbeef"}
     params = {"originId": originId, "destinationId": destinationId,
               "date": date, "time": time}
     try:
         res = requests.get(url, headers=headers, params=params)
-        return res.json()
+        data = res.json()
+        return data[0]
     except Exception as e:
         print(e)
+        print(data)
+
+
+def getTripPrice(tripId, token):
+    url = 'https://b2p-int.api.sbb.ch/api/v2/prices'
+    headers = {"Authorization": token, "X-Contract-Id": "HAC222P",
+               "X-Conversation-Id": "cafebabe-0815-4711-1234-ffffdeadbeef"}
+    params = {"passengers": "paxa;42;half-fare", "tripIds": tripId}
+    try:
+        res = requests.get(url, headers=headers, params=params)
+        return res.json()[0]
+    except Exception as e:
+        print(e)
+
+
+def getTrip(originId, destinationId, date, time):
+    token = getSBBToken()['access_token']
+    trip = getTripId(originId, destinationId, date, time, token)
+    tripId = trip['tripId']
+    tripPrice = getTripPrice(tripId, token)['price']
+    return {"price": tripPrice, "segments": trip['segments']}
+
+
+def getReturnTrip(originId, destinationId, date):
+    firstLeg = getTrip(originId, destinationId, date, "10:00")
+    secondLeg = getTrip(destinationId, originId, date, "17:00")
+    if firstLeg is None or secondLeg is None:
+        return None
+    price = firstLeg['price'] + secondLeg['price']
+    return {"price": price, "firstLeg": firstLeg, "secondLeg": secondLeg}
