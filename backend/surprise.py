@@ -60,7 +60,7 @@ def checkJson(expectedFields, data):
 
 
 def getCSV():
-    return pd.read_csv("fakeData.csv") #csv file which you want to import
+    return pd.read_csv("data.csv") #csv file which you want to import
 
 def checkCategoriesInColumns(categories, columns):
     for category in categories:

@@ -5,7 +5,7 @@ from geopy import distance
 # start csv with the column headers
 def startCSVFile():
     with open('stationData.csv', mode='w', newline='', encoding='utf-8') as stationData_file:
-        fieldnames = ['locationId','station','latitude','longitude','mountain','castle','swim_place','shopping_mall','amusement_park','art_gallery','museum']
+        fieldnames = ['UIC','station','latitude','longitude','mountain','castle','swim','shopping_mall','amusement_park','art_gallery','museum']
         stationData_writer = csv.DictWriter(stationData_file, fieldnames=fieldnames)
         stationData_writer.writeheader()
         getAllStationsAndTheirLocation(stationData_writer)
@@ -16,6 +16,7 @@ def getAllStationsAndTheirLocation(writer):
     curr_site = 1
 
     while curr_site <= max_site:
+        print('site: %s ' %curr_site)
         url = 'https://data.sbb.ch/api/records/1.0/search/'
         dataset = 'betriebspunkte-didok'
         rows = '20'
@@ -40,7 +41,7 @@ def getAllStationsAndTheirLocation(writer):
             latitude = record['fields']['geopos'][0]
             longitude = record['fields']['geopos'][1]
             places = getPlacesOfALocation(latitude,longitude)
-            writer.writerow({'locationId':locationId,'station':name,'latitude':latitude,'longitude':longitude,'mountain': places['mountain'],'castle':places['castle'],'swim_place':places['swim'],'shopping_mall':places['shopping mall'],'amusement_park':places['amusement park'],'art_gallery':places['art gallery'],'museum':places['museum']})
+            writer.writerow({'UIC':locationId,'station':name,'latitude':latitude,'longitude':longitude,'mountain': places['mountain'],'castle':places['castle'],'swim':places['swim'],'shopping_mall':places['shopping mall'],'amusement_park':places['amusement park'],'art_gallery':places['art gallery'],'museum':places['museum']})
 
 
         
@@ -76,6 +77,7 @@ def getPlacesOfALocation(latitude,longitude):
         places = data['results'][:maxNumberPlaces]
         counter = 0
         for place in places:
+            print(".", end =" ") 
             placeLatitude = place['geometry']['location']['lat']
             placeLongitude = place['geometry']['location']['lng']
             placeDistance = distance.distance((float(latitude),float(longitude)), (float(placeLatitude),float(placeLongitude))).km
