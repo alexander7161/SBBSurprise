@@ -10,11 +10,14 @@ export default new Vuex.Store({
     },
     surprise: {
       startDate: null,
+      startTime: null,
+      endTime: null,
       startLocation: {
         id: null,
         name: null
       },
-      categories: []
+      categories: [],
+      price: null
     }
   },
   mutations: {
