@@ -18,7 +18,7 @@
                         <template slot="md-autocomplete-item" slot-scope="{ item }">{{ item.dst_bezeichnung_offiziell }}</template>
                     </md-autocomplete>
 
-                    <md-datepicker v-model="selectedDate" />
+                    <md-datepicker v-model="selectedDate" :md-disabled-dates="filterDate" />
 
                     <md-button class="md-primary" @click="handleRequest">Lezze Go</md-button>
                 </form>
@@ -63,6 +63,11 @@ export default {
         updateSelection (item) {
             this.selectedStation.id = item.didok85;
             this.selectedStation.name = item.dst_bezeichnung_offiziell;
+        },
+        filterDate (date) {
+            const now = this.$moment();
+            const then = this.$moment(date);
+            return then.isBefore(now) || (then.isSame(now, 'day') && now.hour >= 17);
         },
         handleRequest () {
             if (!this.selectedStation || !this.selectedDate) {
