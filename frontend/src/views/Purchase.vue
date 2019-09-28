@@ -26,7 +26,6 @@
             }
         },
         computed: {
-            //Todo handle display if surprise is empty
             surprise() {
                 return this.$store.state.surprise;
             }

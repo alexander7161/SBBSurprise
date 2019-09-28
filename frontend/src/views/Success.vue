@@ -4,7 +4,6 @@
             <md-card-header>
                 <div class="md-title">Congratulations</div>
                 <div class="md-subhead">You have successfully booked your surprise roundtrip.</div>
-
             </md-card-header>
         </md-card>
     </div>
