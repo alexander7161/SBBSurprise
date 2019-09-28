@@ -3,7 +3,7 @@
         <div class="categories">
             <section class="error" v-if="!categories">No categories found</section>
             <section id="category-list-container">
-                <md-chip v-for="category in categories"
+                <md-chip v-for="category in categories" :key="category"
                          @click="handleCategoryClick($event, category)"
                          md-clickable>{{category}}</md-chip>
             </section>
