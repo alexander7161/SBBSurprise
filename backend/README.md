@@ -9,6 +9,8 @@ Windows:
 venv\Scripts\activate
 ```
 
+Install Python Dependencies (in the virtual environment): `pip install -r requirements.txt`
+
 [Running flask](https://flask.palletsprojects.com/en/1.1.x/quickstart/)
 Mac/Linux:
 ```bash
