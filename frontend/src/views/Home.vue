@@ -78,7 +78,7 @@ export default {
             });
 
             this.$store.commit('updateDate', {
-                startDate: this.selectedDate.toISOString().slice(0, 9)
+                startDate: this.selectedDate.toISOString().slice(0, 10)
             });
 
             this.$router.push('categories');
