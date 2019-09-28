@@ -64,6 +64,11 @@
                 this.selectedStation.id = item.didok85;
                 this.selectedStation.name = item.dst_bezeichnung_offiziell;
             },
+            filterDate (date) {
+                const now = this.$moment();
+                const then = this.$moment(date);
+                return then.isBefore(now) || (then.isSame(now, 'day') && now.hour >= 17);
+            },
             handleRequest() {
                 if (!this.selectedStation || !this.selectedDate) {
                     // TODO: visualise errors
