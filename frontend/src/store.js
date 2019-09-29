@@ -1,53 +1,69 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import moment from 'moment'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
         BACKEND_URL: 'http://backendhackers.scapp.io/',
         wizard: {
-            currentStep: 0
-        },
-        surprise: {
-            startDate: null,
-            startTime: null,
-            endTime: null,
+            currentStep: 0,
             startLocation: {
                 id: null,
                 name: null
             },
+            startDate: null,
             categories: [],
             selectedCategories: [],
+            loading: false
+        },
+        surprise: {
+            startTime: null,
+            endTime: null,
             price: null
         },
-        surprises: []
+        offers: []
+    },
+    getters: {
+        getOffer: (state) => (index) => {
+            if (index >= state.offers) {
+                // abort
+            }
+            const selectedSurprise = state.offers[index];
+            const beginning = moment(selectedSurprise.firstLeg.startTime);
+            const end = moment(selectedSurprise.secondLeg.endTime);
+            console.log(selectedSurprise);
+            return {
+                startDate: beginning.format('DD-MM-YYYY'),
+                startTime: beginning.format('HH:mm'),
+                endTime: end.format('HH:mm'),
+                price: selectedSurprise.price / 100.0
+            };
+        }
     },
     mutations: {
         updateLocation(state, payload) {
-            state.surprise.startLocation.id = payload.startLocation.id;
-            state.surprise.startLocation.name = payload.startLocation.name;
+            state.wizard.startLocation = payload.startLocation;
         },
         updateDate(state, payload) {
-            state.surprise.startDate = payload.startDate;
+            state.wizard.startDate = payload.startDate;
         },
         updateCategories(state, payload) {
-            state.surprise.categories = payload.categories;
+            state.wizard.categories = payload.categories;
         },
         updateCategorySelection(state, payload) {
-            state.surprise.selectedCategories = payload.categories;
+            state.wizard.selectedCategories = payload.categories;
         },
-        updateStartTime(state, payload) {
-            state.surprise.startTime = payload.startTime;
+        updateOffersData(state, payload) {
+            state.offers = payload;
         },
-        updateEndTime(state, payload) {
-            state.surprise.endTime = payload.endTime;
+        setLoading(state, loading) {
+            state.wizard.loading = loading;
         },
-        updatePrice(state, payload) {
-            state.surprise.price = payload.price;
-        },
-        updateSurprises(state, payload) {
-            state.surprises = payload
+        setSurprise(state, surpriseData) {
+            state.surprise = surpriseData;
         }
     },
     actions: {
@@ -66,20 +82,24 @@ export default new Vuex.Store({
             }
         },
         async postSurprise(context) {
-            const data = JSON.stringify({
-                locationId: context.state.surprise.startLocation.id,
-                date: context.state.surprise.startDate,
-                categories: context.state.surprise.selectedCategories
-            });
+            context.commit('setLoading', true);
             const result = await fetch(context.state.BACKEND_URL + 'surprise', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: data
+                body: JSON.stringify({
+                    locationId: context.state.wizard.startLocation.id,
+                    date: context.state.wizard.startDate,
+                    categories: context.state.wizard.selectedCategories
+                })
             });
             const response = await result.json();
-            console.log(response);
+            context.commit('updateOffersData', response);
+            console.log(context.state.offers);
+            console.log(context.getters.getOffer(0));
+            context.commit('setSurprise', context.getters.getOffer(0));
+            context.commit('setLoading', false);
         }
     }
 })

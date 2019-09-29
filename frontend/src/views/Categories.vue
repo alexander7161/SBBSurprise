@@ -8,7 +8,8 @@
             <section id="category-list-container">
                 <md-chip v-for="category in categories" :key="category"
                          @click="handleCategoryClick($event, category)"
-                         md-clickable>{{category}}</md-chip>
+                         md-clickable>{{category}}
+                </md-chip>
             </section>
             <section>
                 <md-button class="md-primary md-raised" :disabled="!categories" @click="handleRequest">
@@ -22,30 +23,31 @@
 <script>
     export default {
         name: "Categories",
-        data () {
+        data() {
             return {
                 selection: {},
                 loading: false
             }
         },
         methods: {
-            handleCategoryClick (event, category) {
+            handleCategoryClick(event, category) {
                 this.selection[category] = !this.selection[category];
                 event.target.closest('.md-chip').classList.toggle('md-selected');
                 this.$store.commit('updateCategorySelection', {
                     categories: this.categories.filter(category => this.selection[category])
                 });
             },
-            handleRequest () {
+            handleRequest() {
                 this.$store.dispatch('postSurprise');
+                this.$router.push({name: 'purchase'});
             }
         },
         computed: {
-            categories () {
-                return this.$store.state.surprise.categories;
+            categories() {
+                return this.$store.state.wizard.categories;
             }
         },
-        created () {
+        created() {
             this.$store.dispatch('getCategories');
         }
     }
