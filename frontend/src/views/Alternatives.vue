@@ -3,15 +3,19 @@
         <md-card id="main-card">
             <md-card-header>
                 <div class="md-title">Alternatives</div>
-                <div class="md-subhead">Click on an option to choose it.</div>
+                <div class="md-subhead">Click on an alternative Surprise Trip to choose it. <br/>If you need some
+                    additional adjustments
+                    click here:
+                    <md-button id="options" class="md-primary" @click="showOptions">Options</md-button>
+                </div>
             </md-card-header>
             <md-card-content>
                 <ul id="surprises">
-                    <md-card v-for="surprise in surprises" class="surpriseCards">
-                        <md-button class="surprise" @click="chooseSurprise(surprise)">
+                    <md-card v-for="offer in offers" class="surpriseCards">
+                        <md-button class="surprise" @click="chooseSurprise(offer)">
                             <li>
-                                {{ surprise.startLocation.name }} {{ surprise.startDate }} {{surprise.startTime}} -
-                                {{surprise.endTime}} Price: {{surprise.price}}
+                                {{ wizard.startLocation.name }} {{ wizard.startDate }} {{offer.startTime}} -
+                                {{offer.endTime}} Price: {{offer.price}} CHF
                             </li>
                         </md-button>
                     </md-card>
@@ -22,42 +26,50 @@
 </template>
 
 <script>
-    import router from "../router";
-
     export default {
         name: "Alternatives",
         methods: {
             chooseSurprise(surprise) {
-                this.saveChosenSurprise(surprise);
-                router.push({name: 'purchase'});
-            },
-            saveChosenSurprise(surprise) {
-                this.$store.commit('updateLocation', {
-                    startLocation: surprise.startLocation
-                });
-                this.$store.commit('updateDate', {
-                    startDate: surprise.startDate
-                });
-                this.$store.commit('updateStartTime', {
-                    startTime: surprise.startTime
-                });
-                this.$store.commit('updateEndTime', {
-                    endTime: surprise.endTime
-                });
-                this.$store.commit('updatePrice', {
-                    price: surprise.price
-                });
+                this.$store.commit('setSurprise', surprise);
+                this.$router.push({name: 'purchase'});
+            }, showOptions() {
+                //Todo enable Options like specific Time ranges (startTime and endTime),
+                // a different end location (so no roundtripp), a maximum time one wants to stay in the trains,
+                // exclude mobility options (not by boat - seasick, or by bus - wheelchair)
             }
         },
         computed: {
-            surprises() {
-                return this.$store.state.surprises;
+            wizard() {
+                return this.$store.state.wizard;
+            },
+            offers() {
+                console.log(this.$store.state.offers);
+                console.log([...Array(this.$store.state.offers.length).keys()].map(num => this.$store.getters.getOffer(num)));
+                return [...Array(this.$store.state.offers.length).keys()].map(num => this.$store.getters.getOffer(num))
             }
         }
     }
 </script>
 
 <style scoped>
+    .alternative {
+        width: inherit;
+        height: inherit;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #main-card {
+        width: 48rem;
+        max-width: 90%;
+        padding-left: 5vw;
+        padding-right: 5vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     li {
         list-style: none;
     }
@@ -81,7 +93,11 @@
     }
 
     .surpriseCards {
-        width: 50%;
+        width: 80%;
         margin: auto;
+    }
+
+    #options {
+        vertical-align: middle;
     }
 </style>
