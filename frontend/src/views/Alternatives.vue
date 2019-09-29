@@ -15,7 +15,7 @@
                         <md-button class="surprise" @click="chooseSurprise(offer)">
                             <li>
                                 {{ wizard.startLocation.name }} {{ wizard.startDate }} {{offer.startTime}} -
-                                {{offer.endTime}} Price: {{offer.price}}
+                                {{offer.endTime}} Price: {{offer.price}} CHF
                             </li>
                         </md-button>
                     </md-card>
@@ -43,6 +43,8 @@
                 return this.$store.state.wizard;
             },
             offers() {
+                console.log(this.$store.state.offers);
+                console.log([...Array(this.$store.state.offers.length).keys()].map(num => this.$store.getters.getOffer(num)));
                 return [...Array(this.$store.state.offers.length).keys()].map(num => this.$store.getters.getOffer(num))
             }
         }
@@ -50,6 +52,24 @@
 </script>
 
 <style scoped>
+    .alternative {
+        width: inherit;
+        height: inherit;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #main-card {
+        width: 48rem;
+        max-width: 90%;
+        padding-left: 5vw;
+        padding-right: 5vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     li {
         list-style: none;
     }
@@ -73,7 +93,7 @@
     }
 
     .surpriseCards {
-        width: 50%;
+        width: 80%;
         margin: auto;
     }
 

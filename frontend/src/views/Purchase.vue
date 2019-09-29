@@ -7,7 +7,7 @@
             <md-card-content>
                 <div class="startingpoint">{{ wizard.startLocation.name }}</div>
                 <div class="datetime">{{ wizard.startDate }} {{ surprise.startTime }} - {{ surprise.endTime }}</div>
-                <div class="price">{{ surprise.price }}</div>
+                <div class="price">{{ surprise.price }} CHF</div>
                 <md-button class="md-primary md-raised buy" @click="handleRequest">Buy Surprise</md-button>
                 <br/>
                 <md-button class="md-primary" @click="showOptions">I don't like this option!</md-button>
@@ -41,6 +41,15 @@
 </script>
 
 <style scoped>
+    .purchase {
+        width: inherit;
+        height: inherit;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
     #main-card {
         width: 48rem;
         max-width: 90%;
