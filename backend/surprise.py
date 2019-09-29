@@ -45,7 +45,7 @@ def main():
     # TODO: filter it more by possible attributes: weather, previous commutes or events
 
     stationLocations = list(
-        filter(lambda UIC: UIC is not originLocation, df['UIC'].tolist()[:8]))
+        filter(lambda UIC: UIC is not originLocation, df['UIC'].tolist()[:3]))
 
     trips = list(map(lambda stationId: sbb.getReturnTrip(
         originLocation, stationId, date=data['date']), stationLocations))
