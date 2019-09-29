@@ -68,11 +68,14 @@ def getSecondLeg(originId, destinationId, date, time):
 
 
 def getReturnTrip(originId, destinationId, date):
-    firstLeg, startLocation = getFirstLeg(
-        originId, destinationId, date, "10:00")
-    secondLeg = getSecondLeg(destinationId, originId, date, "17:00")
-    if firstLeg is None or secondLeg is None:
+    try:
+        firstLeg, startLocation = getFirstLeg(
+            originId, destinationId, date, "10:00")
+        secondLeg = getSecondLeg(destinationId, originId, date, "17:00")
+        if firstLeg is None or secondLeg is None:
+            return None
+        price = firstLeg['price'] + secondLeg['price']
+        return {"price": price, "firstLeg": firstLeg, "secondLeg": secondLeg,
+                "startLocation": startLocation, "originId": originId}
+    except:
         return None
-    price = firstLeg['price'] + secondLeg['price']
-    return {"price": price, "firstLeg": firstLeg, "secondLeg": secondLeg,
-            "startLocation": startLocation, "originId": originId}
