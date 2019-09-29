@@ -34,7 +34,6 @@ export default new Vuex.Store({
             const selectedSurprise = state.offers[index];
             const beginning = moment(selectedSurprise.firstLeg.startTime);
             const end = moment(selectedSurprise.secondLeg.endTime);
-            console.log(selectedSurprise);
             return {
                 startDate: beginning.format('DD-MM-YYYY'),
                 startTime: beginning.format('HH:mm'),
@@ -77,7 +76,6 @@ export default new Vuex.Store({
             if (result.ok) {
                 context.commit('updateCategories', {categories: await result.json()})
             } else {
-                console.log(result);
                 console.error('no result')
             }
         },
@@ -96,8 +94,6 @@ export default new Vuex.Store({
             });
             const response = await result.json();
             context.commit('updateOffersData', response);
-            console.log(context.state.offers);
-            console.log(context.getters.getOffer(0));
             context.commit('setSurprise', context.getters.getOffer(0));
             context.commit('setLoading', false);
         }
