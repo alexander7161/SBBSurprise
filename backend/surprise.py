@@ -30,16 +30,22 @@ def main():
         print('Invalid category %s' % invalid)
         return 'Invalid category %s' % invalid
 
-    for category in categories:
-        filtered_categories = df[category] > 0
-        df = df[filtered_categories]
-
-    # rank stations by amount of the categories
+    def rowBelongsToCategory(row):
+        dictRow = row._asdict()
+        for category in categories:
+            if dictRow[category] > 0:
+                return True
+        return False
     df = df.sort_values(by=categories, ascending=False)
 
+    df = pd.DataFrame(list(filter(lambda row: rowBelongsToCategory(row), df.itertuples())))
+
+    # rank stations by amount of the categories
+
     # TODO: filter it more by possible attributes: weather, previous commutes or events
+
     stationLocations = list(
-        filter(lambda UIC: UIC is not originLocation, df['UIC'].tolist()))
+        filter(lambda UIC: UIC is not originLocation, df['UIC'].tolist()[:3]))
 
     trips = list(map(lambda stationId: sbb.getReturnTrip(
         originLocation, stationId, date=data['date']), stationLocations))
