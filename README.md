@@ -14,7 +14,9 @@ With only entering this low amount of information you'll get an offer for a surp
 While you don't have to do any organisation, the application checks for every train-, bus- and boat station in switzerland whether there are some interesting things around and if they fit your chosen categories. It then evaluates different offers with discounts up to 70% to find you a nice and not expensive day off.
 
 ## How we built it
+SBB offered some APIs with a lot of data about their trains, stations, tickets, etc. Once we had some information about the stations we needed to find some activities to do there. That's why we used the Google API to categorize the station based on the reachable interesting things around them. 
 
+After we had our categorized data, we could start to filter and work with it. Also we needed the SBB API again to find the best price offers for the trips.
 
 
 ## Challenges we ran into
