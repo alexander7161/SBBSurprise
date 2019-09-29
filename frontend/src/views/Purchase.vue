@@ -5,8 +5,8 @@
                 <div class="md-title">Your surprise Roundtrip</div>
             </md-card-header>
             <md-card-content>
-                <div class="startingpoint">{{ surprise.startLocation.name }}</div>
-                <div class="datetime">{{ surprise.startDate }} {{ surprise.startTime }} - {{ surprise.endTime }}</div>
+                <div class="startingpoint">{{ wizard.startLocation.name }}</div>
+                <div class="datetime">{{ wizard.startDate }} {{ surprise.startTime }} - {{ surprise.endTime }}</div>
                 <div class="price">{{ surprise.price }}</div>
                 <md-button class="md-primary md-raised buy" @click="handleRequest">Buy Surprise</md-button>
                 <br/>
@@ -17,22 +17,23 @@
 </template>
 
 <script>
-    import router from "../router";
-
     export default {
         name: "Purchase",
         components: {},
         methods: {
             handleRequest() {
-                router.push({name: 'success'});
+                this.$router.push({name: 'success'});
             },
             showOptions() {
-                router.push({name: 'alternatives'})
+                this.$router.push({name: 'alternatives'})
             }
         },
         computed: {
             surprise() {
                 return this.$store.state.surprise;
+            },
+            wizard() {
+                return this.$store.state.wizard;
             }
         }
 

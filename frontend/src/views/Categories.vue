@@ -16,8 +16,6 @@
 </template>
 
 <script>
-    import router from "../router";
-
     export default {
         name: "Categories",
         data() {
@@ -36,12 +34,12 @@
             },
             handleRequest() {
                 this.$store.dispatch('postSurprise');
-                router.push({name: 'purchase'})
+                this.$router.push({name: 'purchase'});
             }
         },
         computed: {
             categories() {
-                return this.$store.state.surprise.categories;
+                return this.$store.state.wizard.categories;
             }
         },
         created() {
