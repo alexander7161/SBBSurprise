@@ -80,6 +80,28 @@ export default new Vuex.Store({
             });
             const response = await result.json();
             console.log(response);
+            this.saveToStore(response);
+        },
+        saveToStore(result) {
+            this.updateSurprises(this.state, result);
+
+            const surprise = result[0];
+            this.updateLocation(this.state, {startLocation: {id: surprise.originId, name: surprise.startLocation}});
+            this.parseAndSaveTime(surprise);
+            const price = surprise.price / 10;
+            this.updatePrice(this.state, price);
+        },
+        parseAndSaveTime(surprise) {
+            let startDateTime = surprise.firstLeg.startTime;
+            startDateTime = new Date(startDateTime);
+            let date = startDateTime.getDay() + "." + startDateTime.getMonth() + "." + startDateTime.getFullYear();
+            let startTime = startDateTime.getHours() + ":" + startDateTime.getMinutes();
+            let endDateTime = surprise.secondLeg.endTime;
+            endDateTime = new Date(endDateTime);
+            let endTime = endDateTime.getHours() + ":" + endDateTime.getMinutes();
+            this.updateDate(this.state, date);
+            this.updateStartTime(this.state, startTime);
+            this.updateEndTime(this.state, endTime);
         }
     }
 })
