@@ -1,7 +1,10 @@
 <template>
-    <md-content>
-        <div class="categories">
+    <div class="categories">
+        <div>
             <section class="error" v-if="!categories">No categories found</section>
+            <section v-else>
+                <div class="md-title">Pick categories of activities you might enjoy.</div>
+            </section>
             <section id="category-list-container">
                 <md-chip v-for="category in categories" :key="category"
                          @click="handleCategoryClick($event, category)"
@@ -9,10 +12,12 @@
                 </md-chip>
             </section>
             <section>
-                <md-button class="md-primary" :disabled="!categories" @click="handleRequest">Finish</md-button>
+                <md-button class="md-primary md-raised" :disabled="!categories" @click="handleRequest">
+                    Surprise me
+                </md-button>
             </section>
         </div>
-    </md-content>
+    </div>
 </template>
 
 <script>
@@ -27,7 +32,7 @@
         methods: {
             handleCategoryClick(event, category) {
                 this.selection[category] = !this.selection[category];
-                event.target.closest('.md-chip').classList.toggle('md-primary');
+                event.target.closest('.md-chip').classList.toggle('md-selected');
                 this.$store.commit('updateCategorySelection', {
                     categories: this.categories.filter(category => this.selection[category])
                 });
@@ -50,8 +55,15 @@
 
 <style lang="scss" scoped>
     .categories {
+        width: inherit;
+        height: inherit;
         display: flex;
         flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .md-button {
+            margin-top: 1.5rem;
+        }
     }
 
     #category-list-container {
@@ -59,14 +71,14 @@
         display: flex;
         flex-wrap: wrap;
         align-self: center;
-
+        justify-content: center;
+        margin-top: 1.5rem;
         .md-chip {
             margin: 0.5rem;
-
-            &:hover {
-                background-color: var(--md-theme-default-primary, #b71c1c);
+            &.md-selected {
+                background-color: var(--md-theme-default-icon, rgba(0, 0, 0, 0.54));
                 color: #fff;
-                color: var(--md-theme-default-text-primary-on-primary, #fff);
+                color: var(--md-theme-default-text-primary-on-icon, #fff);
             }
         }
     }
