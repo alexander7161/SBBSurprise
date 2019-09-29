@@ -4,6 +4,9 @@
             <button id="homebutton" class="md-title" @click="goHome">SBB Surprise</button>
         </md-app-toolbar>
         <md-app-content>
+            <div id="loading-screen" v-if="loading">
+                <img src="./assets/logoAnimation.gif" alt="Loading animation">
+            </div>
             <router-view/>
         </md-app-content>
     </md-app>
@@ -13,6 +16,11 @@
     import router from "./router";
 
     export default {
+        computed: {
+            loading () {
+                return this.$store.state.wizard.loading;
+            }
+        },
         methods: {
             goHome() {
                 router.push({name: 'home'})
@@ -38,6 +46,30 @@
         text-align: center;
         color: #2c3e50;
         height: 100vh;
+    }
+
+    #loading-screen {
+        z-index: 10;
+        position: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #595d90;
+        > img {
+            max-width: 35vw;
+            display: block;
+        }
+        @media screen and (max-width: 556px) {
+            > img {
+                max-width: initial;
+                width: inherit;
+                object-fit: cover;
+            }
+        }
     }
 
     #homebutton {
