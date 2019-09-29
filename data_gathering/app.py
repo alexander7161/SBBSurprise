@@ -4,14 +4,15 @@ from geopy import distance
 
 # start csv with the column headers
 def startCSVFile():
+    token = getSBBToken()
     with open('stationData.csv', mode='w', newline='', encoding='utf-8') as stationData_file:
         fieldnames = ['UIC','station','latitude','longitude','mountain','castle','swim','shopping_mall','amusement_park','art_gallery','museum']
         stationData_writer = csv.DictWriter(stationData_file, fieldnames=fieldnames)
         stationData_writer.writeheader()
-        getAllStationsAndTheirLocation(stationData_writer)
+        getAllStationsAndTheirLocation(stationData_writer,token)
 
 # get a list of all stations together with the location (lat,long)
-def getAllStationsAndTheirLocation(writer):
+def getAllStationsAndTheirLocation(writer,token):
     max_site = 20
     curr_site = 1
 
@@ -37,6 +38,8 @@ def getAllStationsAndTheirLocation(writer):
         records = data['records']
         for record in records:
             locationId = record['fields']['bpuic']
+            if(locationDoesNotExist(locationId,token)):
+                next
             name = record['fields']['gdname']
             latitude = record['fields']['geopos'][0]
             longitude = record['fields']['geopos'][1]
@@ -62,7 +65,7 @@ def getPlacesOfALocation(latitude,longitude):
         location = '%s,%s' %(latitude,longitude)
         radius = '200'
         # don't publish the API key
-        key = 'xxxxxx'
+        key = 'AIzaSyAsvig_epzOr9f_cZLxjyRs3eOBro_u_Gc'
 
         params = {
             'query': query,
@@ -77,7 +80,6 @@ def getPlacesOfALocation(latitude,longitude):
         places = data['results'][:maxNumberPlaces]
         counter = 0
         for place in places:
-            print(".", end =" ") 
             placeLatitude = place['geometry']['location']['lat']
             placeLongitude = place['geometry']['location']['lng']
             placeDistance = distance.distance((float(latitude),float(longitude)), (float(placeLatitude),float(placeLongitude))).km
@@ -86,6 +88,30 @@ def getPlacesOfALocation(latitude,longitude):
         result[category] = counter
 
     return result
+
+def getSBBToken():
+    url = 'https://sso-INT.sbb.ch/auth/realms/SBB_Public/protocol/openid-connect/token'
+    data = {"grant_type": "client_credentials", "client_id": "22ebc2be",
+            "client_secret": "2c820784f3e28837959abc43120989ca"}
+    try:
+        result = requests.post(url, data=data)
+        return result.json()['access_token']
+    except Exception as e:
+        print(e)
+
+
+def locationDoesNotExist(destinationId,token):
+    url = 'https://b2p-int.api.sbb.ch/api/trips'
+    headers = {"Authorization": token, "X-Contract-Id": "HAC222P",
+               "X-Conversation-Id": "cafebabe-0815-4711-1234-ffffdeadbeef"}
+    params = {"originId": "8503000", "destinationId": destinationId,
+              "date": "2019-10-02", "time": "10:22"}
+    try:
+        res = requests.get(url, headers=headers, params=params)
+        data = res.json()
+        return False
+    except Exception as e:
+        return True
 
 
 startCSVFile()

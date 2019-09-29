@@ -13,7 +13,7 @@ def hello_world():
 
 @app.route('/categories')
 def categories():
-    categories = ['mountain','castle','swim','place','shopping_mall','amusement_park','art_gallery','museum']
+    categories = ['mountain','castle','swim','shopping_mall','amusement_park','art_gallery','museum']
     return jsonify(categories)
 
 
