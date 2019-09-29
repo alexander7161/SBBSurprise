@@ -22,7 +22,7 @@
 
                     <md-datepicker v-model="selectedDate" :md-disabled-dates="filterDate" />
 
-                    <md-button class="md-primary" @click="handleRequest">Lezze Go</md-button>
+                    <md-button class="md-primary md-raised" @click="handleRequest">Let's Go</md-button>
                 </form>
             </md-card-content>
         </md-card>
@@ -90,6 +90,15 @@
 </script>
 
 <style lang="scss" scoped>
+    .home {
+        width: inherit;
+        height: inherit;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
     #main-card {
         width: 48rem;
         max-width: 90%;
